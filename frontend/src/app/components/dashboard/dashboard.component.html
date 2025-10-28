@@ -1,0 +1,46 @@
+<div class="dashboard-wrapper">
+    <header class="dashboard-header">
+        <h1>📊 Quiz Dashboard</h1>
+        <p>Welcome back! Here’s your quiz summary.</p>
+    </header>
+
+    <!-- Summary Cards -->
+    <section class="stats-section">
+        <div class="stat-card">
+            <h2>{{ totalQuizzes }}</h2>
+            <p>Total Quizzes</p>
+        </div>
+        <div class="stat-card">
+            <h2>{{ totalUsers }}</h2>
+            <p>Registered Users</p>
+        </div>
+        <div class="stat-card">
+            <h2>{{ totalAttempts }}</h2>
+            <p>Total Attempts</p>
+        </div>
+    </section>
+
+    <!-- Recent Quizzes -->
+    <section class="recent-section">
+        <h2>🕒 Recent Quizzes</h2>
+        <table class="recent-table">
+            <thead>
+                <tr>
+                    <th>Quiz Title</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let quiz of recentQuizzes">
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.date }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Start Quiz Button -->
+    <section class="action-section">
+        <button class="start-btn">🚀 Start a New Quiz</button>
+    </section>
+</div>
