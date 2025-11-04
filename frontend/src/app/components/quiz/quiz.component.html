@@ -1,53 +1,78 @@
-<!-- Outer Wrapper with pleasant background -->
-<div class="page-background">
-    <!-- Quiz Selection -->
-    <div class="quiz-container" *ngIf="!selectedQuiz">
-        <h1>🎯 Choose a Quiz</h1>
-        <div class="quiz-grid">
-            <div *ngFor="let quiz of quizzes" class="quiz-card" (click)="startQuiz(quiz)">
-                <h2>{{ quiz.title }}</h2>
-                <p>{{ quiz.description }}</p>
-                <button class="start-btn">Start</button>
-            </div>
+<div class="quiz-wrapper" *ngIf="!selectedQuiz">
+    <h1 class="title">🧠 Choose Your Quiz</h1>
+    <div class="quiz-grid">
+        <div *ngFor="let quiz of quizzes" class="quiz-card" (click)="startQuiz(quiz)">
+            <h2>{{ quiz.title }}</h2>
+            <p>Ready to test your knowledge?</p>
+            <button class="start-btn">🚀 Start</button>
         </div>
     </div>
+</div>
 
-    <!-- Quiz Play -->
-    <div class="quiz-play" *ngIf="selectedQuiz && !quizCompleted">
-        <div class="top-bar">
-            <button class="home-btn" (click)="goHome()">🏠 Home</button>
-            <button class="restart-btn" (click)="restartQuiz()">🔄 Restart</button>
-        </div>
+<!-- Quiz Play -->
+<div class="quiz-play" *ngIf="selectedQuiz && !quizCompleted">
+    <div class="top-bar">
+        <button class="btn" (click)="goHome()">🏠 Home</button>
+        <button class="btn" (click)="restartQuiz()">🔁 Restart</button>
+    </div>
 
-        <h2 class="quiz-title">{{ selectedQuiz.title }}</h2>
+    <h2 class="quiz-title">{{ selectedQuiz.title }}</h2>
 
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar" [style.width.%]="((currentIndex + 1) / questions.length) * 100"></div>
-        </div>
-        <p class="progress-text">Question {{ currentIndex + 1 }} of {{ questions.length }}</p>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="((currentIndex + 1) / questions.length) * 100"></div>
+    </div>
+    <p class="progress-text">Question {{ currentIndex + 1 }} of {{ questions.length }}</p>
 
-        <div class="question">
-            <p>{{ questions[currentIndex]?.question }}</p>
-        </div>
+    <div class="question-card">
+        <p class="question">{{ questions[currentIndex]?.questionText }}</p>
 
         <div class="options">
-            <label *ngFor="let opt of questions[currentIndex]?.options" class="option">
+            <label *ngFor="let opt of questions[currentIndex]?.options" class="option" [class.selected]="selectedAnswer === opt">
         <input type="radio" name="option" [value]="opt" [(ngModel)]="selectedAnswer" />
-        {{ opt }}
+        <span>{{ opt }}</span>
       </label>
         </div>
 
-        <button class="submit-btn" (click)="submitAnswer()">Next</button>
+        <button class="next-btn" (click)="submitAnswer()" [disabled]="!selectedAnswer">
+      {{ currentIndex + 1 === questions.length ? '🏁 Finish' : 'Next ➡️' }}
+    </button>
+    </div>
+</div>
+
+<!-- Result Section -->
+<div class="quiz-result" *ngIf="quizCompleted">
+    <h2>🏆 Quiz Completed!</h2>
+    <p class="score-text">You scored <strong>{{ score }}</strong> / {{ questions.length }}</p>
+
+    <p class="feedback" [ngClass]="{
+    excellent: score >= questions.length * 0.8,
+    good: score >= questions.length * 0.5 && score < questions.length * 0.8,
+    'try-again': score < questions.length * 0.5
+  }">
+        {{ score >= questions.length * 0.8 ? '🌟 Excellent work!' : score >= questions.length * 0.5 ? '👍 Good effort!' : '💪 Keep practicing!' }}
+    </p>
+
+    <div class="result-buttons">
+        <button class="btn" (click)="goHome()">🏠 Home</button>
+        <button class="btn" (click)="restartQuiz()">🔁 Restart</button>
+        <button class="btn" (click)="toggleShowAnswers()">
+      📋 {{ showAnswers ? 'Hide Answers' : 'Show Answers' }}
+    </button>
     </div>
 
-    <!-- Quiz Result -->
-    <div class="quiz-result" *ngIf="quizCompleted">
-        <h2>🏆 Quiz Completed!</h2>
-        <p>You scored {{ score }} / {{ questions.length }}</p>
-        <div class="result-buttons">
-            <button class="home-btn" (click)="goHome()">🏠 Home</button>
-            <button class="restart-btn" (click)="restartQuiz()">🔄 Restart</button>
+    <!-- Show Answers -->
+    <div class="answers" *ngIf="showAnswers">
+        <h3>🧠 Review Your Answers</h3>
+        <div *ngFor="let q of questions; let i = index" class="answer-item">
+            <p><strong>{{ i + 1 }}.</strong> {{ q.questionText }}</p>
+            <p class="your-answer" [ngClass]="{
+        correct: userAnswers[i] === q.options[q.correctAnswer],
+        wrong: userAnswers[i] !== q.options[q.correctAnswer]
+      }">
+                ➤ Your answer: {{ userAnswers[i] || 'Not answered' }}
+            </p>
+            <p class="correct-answer">✅ Correct answer: {{ q.options[q.correctAnswer] }}</p>
         </div>
     </div>
 </div>
