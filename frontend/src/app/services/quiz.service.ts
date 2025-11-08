@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class QuizService {
-  private baseUrl = 'https://quiz-app-backend-sp9d.onrender.com/api/quizzes'; // ✅ updated backend URL
+  // ✅ Backend Render API
+  private baseUrl = 'https://quiz-app-backend-sp9d.onrender.com/api/quizzes';
 
   constructor(private http: HttpClient) {}
 
