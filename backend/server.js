@@ -4,38 +4,39 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import quizRoutes from './routes/quiz.routes.js';
 
-// Load environment variables
+// ✅ Load environment variables
 dotenv.config();
 
-// Connect to MongoDB
+// ✅ Connect to MongoDB
 connectDB();
 
-// Initialize express
+// ✅ Initialize express
 const app = express();
 
-// Middleware
+// ✅ Middleware
 app.use(cors({
     origin: [
-        'https://quiz-app-frontend-a7fo.onrender.com',
-        'http://localhost:4200'
+        'https://quiz-delta-steel.vercel.app', // your Vercel frontend URL
+        'http://localhost:4200' // for local testing
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
+
 app.use(express.json());
 
-// Default route for testing
+// ✅ Default route for testing
 app.get('/', (req, res) => {
-    res.send('✅ Quiz API is running...');
+    res.send('✅ Quiz API is running successfully...');
 });
 
-// Quiz routes
+// ✅ Quiz routes
 app.use('/api/quizzes', quizRoutes);
 
-// Server Port
+// ✅ Server Port
 const PORT = process.env.PORT || 5000;
 
-// Start server
+// ✅ Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
